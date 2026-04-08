@@ -12,4 +12,15 @@ player.play('whoosh.mp3', function(err){
   })
 }
 
-playSound()
+async function getAPIData(){
+  // More info about fetch: https://nodejs.org/learn/getting-started/fetch
+  const post = await fetch('https://jsonplaceholder.typicode.com/posts/5');
+  const postData = await post.json();
+  console.log("Post 5 body -> ", postData.body);
+
+  const comment = await fetch('https://jsonplaceholder.typicode.com/comments/?post=5');
+  const commentData = await comment.json();
+  console.log("Author of first comment -> ", commentData[0].name);
+}
+
+getAPIData();
