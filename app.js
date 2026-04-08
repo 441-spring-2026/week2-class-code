@@ -18,6 +18,14 @@ app.get('/salmon/:year', (req, res) => {
   res.send(salmonHarvests[req.params.year])
 })
 
+app.get('/total/:year', (req, res) => {
+  let harvest = salmonHarvests[req.params.year];
+  let total = harvest.coho + harvest.chinook;
+  // Express automatically formats Object responses as JSON
+  // https://expressjs.com/en/5x/api.html#res.send
+  res.send({year: req.params.year, total: total})
+})
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
