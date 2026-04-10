@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const port = 3000
+const port = 3001
 
 const salmonHarvests ={
   "2017": {coho: 501392, chinook: 403115},
@@ -14,16 +14,33 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-app.get('/salmon/:year', (req, res) => {
-  res.send(salmonHarvests[req.params.year])
+// A POST request handler
+// curl --request http://localhost:3001
+app.post('/', (req, res) => {
+  res.send('post request received')
+})
+
+app.get('/year/:id', (req, res) => {
+  const year = req.params.id;
+  const data = salmonHarvests[year];
+  if(!data){
+    res.send("No data for that year, try again")
+  }else{
+    res.send(data);
+  }
 })
 
 app.get('/total/:year', (req, res) => {
-  let harvest = salmonHarvests[req.params.year];
-  let total = harvest.coho + harvest.chinook;
-  // Express automatically formats Object responses as JSON
-  // https://expressjs.com/en/5x/api.html#res.send
-  res.send({year: req.params.year, total: total})
+  const year = req.params.year;
+  const data = salmonHarvests[year];
+  if(!data){
+    res.send("No data for that year, try again")
+  }else{
+    const total = data.coho + data.chinook;
+    // Express automatically formats Object responses as JSON
+    // https://expressjs.com/en/5x/api.html#res.send
+    res.json({"total": total});
+  }
 })
 
 app.listen(port, () => {
